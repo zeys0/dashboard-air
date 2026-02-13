@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan - Sistem Pengelolaan Air</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            color: white;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .menu-item svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #2c3e50;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Settings Layout */
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        /* Settings Menu */
+        .settings-menu {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .settings-menu-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        .settings-menu-item:hover {
+            background: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        .settings-menu-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .settings-menu-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .card-header {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-header h2 {
+            font-size: 22px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .card-header p {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group .hint {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .toggle-group:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-info h4 {
+            font-size: 15px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .toggle-info p {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 26px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        /* Tariff Table */
+        .tariff-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .tariff-table th,
+        .tariff-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .tariff-table th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .tariff-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Alert Box */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert.info {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            border-left: 4px solid #1976d2;
+        }
+
+        .alert.warning {
+            background-color: #fff3e0;
+            color: #e65100;
+            border-left: 4px solid #f57c00;
+        }
+
+        .alert svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        /* Content Sections */
+        .settings-section {
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        /* User Table */
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .user-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .user-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .user-badge.admin {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .user-badge.staff {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        @media (max-width: 1024px) {
+            .settings-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-menu {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>💧 AquaTrack</h2>
+            <p>Sistem Pengelolaan Air</p>
+        </div>
+        <div class="sidebar-menu">
+            <a href="dashboard-admin.html" class="menu-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Dashboard
+            </a>
+            <a href="data-pelanggan.html" class="menu-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                Data Pelanggan
+            </a>
+            <a href="pembacaan-meter.html" class="menu-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                Pembacaan Meter
+            </a>
+            <a href="tagihan.html" class="menu-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Tagihan
+            </a>
+            <a href="pembayaran.html" class="menu-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Pembayaran
+            </a>
+            <a href="laporan.html" class="menu-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Laporan
+            </a>
+            <a href="pengaturan.html" class="menu-item active">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Pengaturan
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>Pengaturan</h1>
+                <p style="color: #7f8c8d; margin-top: 5px;">Konfigurasi sistem dan preferensi</p>
+            </div>
+            <div class="user-info">
+                <div>
+                    <div style="text-align: right; margin-bottom: 3px; font-weight: 600;">Admin Utama</div>
+                    <div style="text-align: right; font-size: 12px; color: #7f8c8d;">admin@aquatrack.com</div>
+                </div>
+                <div class="user-avatar">AU</div>
+            </div>
+        </div>
+
+        <!-- Settings Layout -->
+        <div class="settings-layout">
+            <!-- Settings Menu -->
+            <div class="settings-menu">
+                <div class="settings-menu-item active" onclick="showSection('company')">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                    Profil Perusahaan
+                </div>
+                <div class="settings-menu-item" onclick="showSection('tariff')">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Tarif Air
+                </div>
+                <div class="settings-menu-item" onclick="showSection('users')">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    Manajemen User
+                </div>
+                <div class="settings-menu-item" onclick="showSection('notifications')">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    Notifikasi
+                </div>
+                <div class="settings-menu-item" onclick="showSection('backup')">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                    </svg>
+                    Backup & Restore
+                </div>
+                <div class="settings-menu-item" onclick="showSection('system')">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                    </svg>
+                    Sistem
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div>
+                <!-- Company Profile Section -->
+                <div id="company" class="settings-section active">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Profil Perusahaan</h2>
+                            <p>Informasi dasar perusahaan/organisasi pengelola air</p>
+                        </div>
+
+                        <form>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Nama Perusahaan/Organisasi</label>
+                                    <input type="text" value="PDAM Semarang" placeholder="Nama perusahaan">
+                                </div>
+                                <div class="form-group">
+                                    <label>Kode Perusahaan</label>
+                                    <input type="text" value="PDAM-SMG" placeholder="Kode">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Alamat Lengkap</label>
+                                <textarea placeholder="Alamat kantor">Jl. Pemuda No. 148, Sekayu, Kec. Semarang Tengah, Kota Semarang, Jawa Tengah 50132</textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Telepon</label>
+                                    <input type="tel" value="(024) 3546677" placeholder="Nomor telepon">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" value="info@pdamsemarang.co.id" placeholder="Email perusahaan">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Website</label>
+                                    <input type="url" value="https://pdamsemarang.co.id" placeholder="URL website">
+                                </div>
+                                <div class="form-group">
+                                    <label>NPWP</label>
+                                    <input type="text" value="01.234.567.8-901.000" placeholder="Nomor NPWP">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Logo Perusahaan</label>
+                                <input type="file" accept="image/*">
+                                <p class="hint">Format: JPG, PNG. Maksimal 2MB. Rekomendasi ukuran: 200x200px</p>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button type="submit" class="btn btn-primary">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Simpan Perubahan
+                                </button>
+                                <button type="reset" class="btn btn-outline">Batal</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tariff Section -->
+                <div id="tariff" class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Pengaturan Tarif Air</h2>
+                            <p>Atur tarif air berdasarkan penggunaan bertingkat</p>
+                        </div>
+
+                        <div class="alert info">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div>
+                                <strong>Tarif Bertingkat</strong><br>
+                                Sistem menggunakan tarif progresif berdasarkan volume penggunaan air per bulan
+                            </div>
+                        </div>
+
+                        <table class="tariff-table">
+                            <thead>
+                                <tr>
+                                    <th>Tingkat</th>
+                                    <th>Rentang Penggunaan</th>
+                                    <th>Tarif per m³</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Tingkat 1</strong></td>
+                                    <td>0 - 10 m³</td>
+                                    <td>Rp 3.500</td>
+                                    <td><button class="btn btn-outline btn-small" style="padding: 6px 12px;">Edit</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tingkat 2</strong></td>
+                                    <td>11 - 20 m³</td>
+                                    <td>Rp 4.500</td>
+                                    <td><button class="btn btn-outline btn-small" style="padding: 6px 12px;">Edit</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tingkat 3</strong></td>
+                                    <td>21 - 30 m³</td>
+                                    <td>Rp 5.500</td>
+                                    <td><button class="btn btn-outline btn-small" style="padding: 6px 12px;">Edit</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tingkat 4</strong></td>
+                                    <td>> 30 m³</td>
+                                    <td>Rp 6.500</td>
+                                    <td><button class="btn btn-outline btn-small" style="padding: 6px 12px;">Edit</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 style="margin-top: 30px; margin-bottom: 15px; font-size: 18px;">Biaya Tambahan</h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Biaya Administrasi Bulanan</label>
+                                <input type="number" value="10000" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Biaya Pemeliharaan</label>
+                                <input type="number" value="2500" placeholder="0">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Denda Keterlambatan (%)</label>
+                                <input type="number" value="2" placeholder="0">
+                                <p class="hint">Persentase dari total tagihan per hari keterlambatan</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Batas Jatuh Tempo (Hari)</label>
+                                <input type="number" value="20" placeholder="0">
+                                <p class="hint">Hari jatuh tempo setiap bulan</p>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Simpan Tarif
+                            </button>
+                            <button class="btn btn-outline">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="users" class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Manajemen User</h2>
+                            <p>Kelola akun admin dan petugas sistem</p>
+                        </div>
+
+                        <button class="btn btn-primary" style="margin-bottom: 20px;">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                            Tambah User Baru
+                        </button>
+
+                        <table class="user-table">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Terakhir Login</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Admin Utama</strong></td>
+                                    <td>admin@aquatrack.com</td>
+                                    <td><span class="user-badge admin">Admin</span></td>
+                                    <td><span style="color: #11998e;">● Aktif</span></td>
+                                    <td>09 Feb 2026 10:30</td>
+                                    <td>
+                                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">Edit</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Petugas 1</strong></td>
+                                    <td>petugas1@aquatrack.com</td>
+                                    <td><span class="user-badge staff">Petugas</span></td>
+                                    <td><span style="color: #11998e;">● Aktif</span></td>
+                                    <td>09 Feb 2026 08:15</td>
+                                    <td>
+                                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">Edit</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Petugas 2</strong></td>
+                                    <td>petugas2@aquatrack.com</td>
+                                    <td><span class="user-badge staff">Petugas</span></td>
+                                    <td><span style="color: #11998e;">● Aktif</span></td>
+                                    <td>08 Feb 2026 16:45</td>
+                                    <td>
+                                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">Edit</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div id="notifications" class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Pengaturan Notifikasi</h2>
+                            <p>Atur notifikasi email dan SMS untuk pelanggan</p>
+                        </div>
+
+                        <h3 style="margin-bottom: 15px; font-size: 16px; color: #2c3e50;">Notifikasi Email</h3>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <h4>Notifikasi Tagihan Baru</h4>
+                                <p>Kirim email otomatis saat tagihan baru dibuat</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <h4>Pengingat Jatuh Tempo</h4>
+                                <p>Kirim email 3 hari sebelum jatuh tempo</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <h4>Konfirmasi Pembayaran</h4>
+                                <p>Kirim email konfirmasi setelah pembayaran diterima</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <h4>Notifikasi Tunggakan</h4>
+                                <p>Kirim email untuk tagihan yang melewati jatuh tempo</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <h3 style="margin: 30px 0 15px; font-size: 16px; color: #2c3e50;">Notifikasi SMS</h3>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <h4>SMS Tagihan Baru</h4>
+                                <p>Kirim SMS saat tagihan baru tersedia</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <h4>SMS Pengingat Pembayaran</h4>
+                                <p>Kirim SMS pengingat 1 hari sebelum jatuh tempo</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Simpan Pengaturan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backup Section -->
+                <div id="backup" class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Backup & Restore Data</h2>
+                            <p>Cadangkan dan pulihkan data sistem</p>
+                        </div>
+
+                        <div class="alert warning">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <div>
+                                <strong>Peringatan!</strong><br>
+                                Pastikan untuk melakukan backup secara berkala untuk menghindari kehilangan data
+                            </div>
+                        </div>
+
+                        <h3 style="margin-bottom: 15px; font-size: 16px; color: #2c3e50;">Backup Otomatis</h3>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <h4>Aktifkan Backup Otomatis</h4>
+                                <p>Sistem akan otomatis backup data setiap hari pukul 02:00</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label>Frekuensi Backup</label>
+                            <select>
+                                <option>Harian</option>
+                                <option>Mingguan</option>
+                                <option>Bulanan</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Simpan Backup (Hari)</label>
+                            <input type="number" value="30" placeholder="Jumlah hari">
+                            <p class="hint">Backup lama akan otomatis dihapus setelah periode ini</p>
+                        </div>
+
+                        <h3 style="margin: 30px 0 15px; font-size: 16px; color: #2c3e50;">Backup Manual</h3>
+
+                        <p style="color: #7f8c8d; margin-bottom: 15px;">Terakhir backup: <strong>09 Feb 2026, 02:00 WIB</strong></p>
+
+                        <div style="display: flex; gap: 10px; margin-bottom: 30px;">
+                            <button class="btn btn-success">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                                Download Backup Terbaru
+                            </button>
+                            <button class="btn btn-primary">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                                </svg>
+                                Backup Sekarang
+                            </button>
+                        </div>
+
+                        <h3 style="margin-bottom: 15px; font-size: 16px; color: #2c3e50;">Restore Data</h3>
+
+                        <div class="form-group">
+                            <label>Upload File Backup</label>
+                            <input type="file" accept=".sql,.zip">
+                            <p class="hint">Format: .sql atau .zip</p>
+                        </div>
+
+                        <button class="btn btn-danger">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Restore Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- System Section -->
+                <div id="system" class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Pengaturan Sistem</h2>
+                            <p>Konfigurasi umum sistem</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nama Aplikasi</label>
+                            <input type="text" value="AquaTrack - Sistem Pengelolaan Air">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Zona Waktu</label>
+                                <select>
+                                    <option>WIB (GMT+7)</option>
+                                    <option>WITA (GMT+8)</option>
+                                    <option>WIT (GMT+9)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Format Tanggal</label>
+                                <select>
+                                    <option>DD/MM/YYYY</option>
+                                    <option>MM/DD/YYYY</option>
+                                    <option>YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Mata Uang</label>
+                                <select>
+                                    <option>IDR - Rupiah</option>
+                                    <option>USD - Dollar</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Bahasa</label>
+                                <select>
+                                    <option>Indonesia</option>
+                                    <option>English</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h3 style="margin: 30px 0 15px; font-size: 16px; color: #2c3e50;">Fitur Sistem</h3>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <h4>Mode Maintenance</h4>
+                                <p>Nonaktifkan akses pelanggan saat maintenance</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <h4>Registrasi Pelanggan Baru</h4>
+                                <p>Izinkan pelanggan mendaftar sendiri</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <h4>Auto Generate Tagihan</h4>
+                                <p>Otomatis buat tagihan setiap awal bulan</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <h3 style="margin: 30px 0 15px; font-size: 16px; color: #2c3e50;">Informasi Sistem</h3>
+
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr style="border-bottom: 1px solid #f0f0f0;">
+                                <td style="padding: 12px 0; color: #7f8c8d;">Versi Aplikasi</td>
+                                <td style="padding: 12px 0; text-align: right; font-weight: 600;">v2.5.1</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #f0f0f0;">
+                                <td style="padding: 12px 0; color: #7f8c8d;">Database</td>
+                                <td style="padding: 12px 0; text-align: right; font-weight: 600;">MySQL 8.0</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #f0f0f0;">
+                                <td style="padding: 12px 0; color: #7f8c8d;">Server</td>
+                                <td style="padding: 12px 0; text-align: right; font-weight: 600;">Apache/2.4.52</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 0; color: #7f8c8d;">PHP Version</td>
+                                <td style="padding: 12px 0; text-align: right; font-weight: 600;">8.1.10</td>
+                            </tr>
+                        </table>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Simpan Pengaturan
+                            </button>
+                            <button class="btn btn-outline">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.settings-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all menu items
+            const menuItems = document.querySelectorAll('.settings-menu-item');
+            menuItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked menu item
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
